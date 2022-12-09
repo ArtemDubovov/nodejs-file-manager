@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-file-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArtemDubovov/nodejs-file-manager.git"
+  },
+  "author": "Artem Dubovov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArtemDubovov/nodejs-file-manager/issues"
+  },
+  "homepage": "https://github.com/ArtemDubovov/nodejs-file-manager#readme"
+}
