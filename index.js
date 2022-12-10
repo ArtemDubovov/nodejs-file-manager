@@ -1,9 +1,13 @@
 import process, { argv, env, stdin, stdout } from 'node:process';
 import path from 'path';
 import { fileURLToPath } from 'node:url';
+import { stat } from 'node:fs';
 
 import getUserName from './components/getUserName.js';
 import showLs from './components/ls.js';
+import cd from './components/cd.js';
+
+//Functions
 
 //Class state
 
@@ -11,14 +15,25 @@ class State {
     constructor(path) {
         this.currentPath = path;
     }
+
+    get currentPath() {
+        return this._currentPath;
+    }
+
+    set currentPath(value) {
+        this._currentPath = value;
+    }
+
     pathToUp () {
-        this.currentPath = path.dirname(this.currentPath);
+        this._currentPath = path.dirname(this._currentPath);
     }
 }
 
 const dataHandler = async (data, StateApp) => {
     try {
-        switch (data.trim().toLowerCase()) {
+        const [command, request1, request2 ] = [...data.split(' ')];
+        switch (data.trim()) {
+
             case '.exit' : 
                 process.exit(0);
             case 'up':
@@ -29,11 +44,25 @@ const dataHandler = async (data, StateApp) => {
                 await showLs(StateApp.currentPath);
                 break;
             }
-            default : 
-                stdout.write('Invalid input\n');
+            default:
+                switch (command.trim()) {
+                    case 'cd': {
+                        const ph = path.resolve(StateApp.currentPath, request1.trim());
+                        stat(ph, (err, stats) => {
+                            if (err || stats.isFile()) {
+                                stdout.write('Invalid input\n');
+                                return;
+                            }
+                            StateApp.currentPath = ph;
+                        });
+                        break;
+                    }
+                    default: 
+                        stdout.write('Invalid input\n');
+                }
         }
     } catch (e) {
-        stdout.write('Operation failed');
+        stdout.write(e.message);
     }
 }
 
@@ -49,7 +78,6 @@ const runApp = async () => {
         // STATE
 
         const StateApp = new State(path.resolve(path.dirname(fileURLToPath(import.meta.url))));
-        console.log(StateApp);
 
         // Start App
         stdout.write(`Welcome to the File Manager, ${USERNAME}!\n`);
