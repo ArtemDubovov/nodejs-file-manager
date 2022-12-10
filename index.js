@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'node:url';
 
 import getUserName from './components/getUserName.js';
+import showLs from './components/ls.js';
 
 //Class state
 
@@ -20,11 +21,14 @@ const dataHandler = async (data, StateApp) => {
         switch (data.trim().toLowerCase()) {
             case '.exit' : 
                 process.exit(0);
-                break;
             case 'up':
                 stdout.write('Command up\n');
                 StateApp.pathToUp();
                 break;
+            case 'ls': {
+                await showLs(StateApp.currentPath);
+                break;
+            }
             default : 
                 stdout.write('Invalid input\n');
         }
