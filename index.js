@@ -6,6 +6,7 @@ import { stat } from 'node:fs';
 import getUserName from './components/getUserName.js';
 import showLs from './components/ls.js';
 import cd from './components/cd.js';
+import add from './components/add.js';
 
 //Functions
 
@@ -57,6 +58,9 @@ const dataHandler = async (data, StateApp) => {
                         });
                         break;
                     }
+                    case 'add':
+                        await add(StateApp.currentPath, request1.trim());
+                        break;
                     default: 
                         stdout.write('Invalid input\n');
                 }
@@ -84,8 +88,8 @@ const runApp = async () => {
         sendCurrentPath(StateApp.currentPath);
 
         // Work App
-        stdin.on('data', (data) => {
-            dataHandler(data, StateApp);
+        stdin.on('data', async (data) => {
+            await dataHandler(data, StateApp);
             sendCurrentPath(StateApp.currentPath);
         }).setEncoding('utf-8');
 
