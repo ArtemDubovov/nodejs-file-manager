@@ -7,6 +7,7 @@ import getUserName from './components/getUserName.js';
 import showLs from './components/ls.js';
 import cd from './components/cd.js';
 import add from './components/add.js';
+import rn from './components/rn.js';
 
 //Functions
 
@@ -61,10 +62,14 @@ const dataHandler = async (data, StateApp) => {
                     case 'add':
                         await add(StateApp.currentPath, request1.trim());
                         break;
+                    case 'rn':
+                        await rn(StateApp.currentPath, request1.trim(), request2.trim());
+                        break;
                     default: 
                         stdout.write('Invalid input\n');
                 }
         }
+        sendCurrentPath(StateApp.currentPath);
     } catch (e) {
         stdout.write(e.message);
     }
@@ -90,7 +95,6 @@ const runApp = async () => {
         // Work App
         stdin.on('data', async (data) => {
             await dataHandler(data, StateApp);
-            sendCurrentPath(StateApp.currentPath);
         }).setEncoding('utf-8');
 
         
