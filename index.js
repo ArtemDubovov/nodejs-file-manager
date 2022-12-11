@@ -9,6 +9,8 @@ import cd from './components/cd.js';
 import add from './components/add.js';
 import rn from './components/rn.js';
 import remove from './components/rm.js';
+import cat from './components/cat.js';
+import system from './components/os.js';
 
 //Functions
 
@@ -34,7 +36,7 @@ class State {
 
 const dataHandler = async (data, StateApp) => {
     try {
-        const [command, request1, request2 ] = [...data.split(' ')];
+        const [command, request1, request2 ] = [...data.split(' ').map(el => el.trim())];
         switch (data.trim()) {
 
             case '.exit' : 
@@ -48,9 +50,9 @@ const dataHandler = async (data, StateApp) => {
                 break;
             }
             default:
-                switch (command.trim()) {
+                switch (command) {
                     case 'cd': {
-                        const ph = path.resolve(StateApp.currentPath, request1.trim());
+                        const ph = path.resolve(StateApp.currentPath, request1);
                         stat(ph, (err, stats) => {
                             if (err || stats.isFile()) {
                                 stdout.write('Invalid input\n');
@@ -61,19 +63,24 @@ const dataHandler = async (data, StateApp) => {
                         break;
                     }
                     case 'add':
-                        await add(StateApp.currentPath, request1.trim());
+                        await add(StateApp.currentPath, request1);
                         break;
                     case 'rn':
-                        await rn(StateApp.currentPath, request1.trim(), request2.trim());
+                        await rn(StateApp.currentPath, request1, request2);
                         break;
                     case 'rm':
-                        await remove(StateApp.currentPath, request1.trim());
+                        await remove(StateApp.currentPath, request1);
+                        break;
+                    case 'cat':
+                        await cat(request1);
+                        break;
+                    case 'os':
+                        await system(request1);
                         break;
                     default: 
                         stdout.write('Invalid input\n');
                 }
         }
-        sendCurrentPath(StateApp.currentPath);
     } catch (e) {
         stdout.write(e.message);
     }
@@ -100,8 +107,9 @@ const runApp = async () => {
         sendCurrentPath(StateApp.currentPath);
 
         // Work App
-        stdin.on('data', async (data) => {
-            await dataHandler(data, StateApp);
+        stdin.on('data', (data) => {
+            dataHandler(data, StateApp)
+            .then(() => sendCurrentPath(StateApp.currentPath));
         }).setEncoding('utf-8');
 
         
