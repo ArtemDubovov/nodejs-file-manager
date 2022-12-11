@@ -1,4 +1,3 @@
-import { setDefaultResultOrder } from 'node:dns';
 import os from 'node:os';
 import { stdout } from 'node:process';
 

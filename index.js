@@ -11,6 +11,8 @@ import rn from './components/rn.js';
 import remove from './components/rm.js';
 import cat from './components/cat.js';
 import system from './components/os.js';
+import getHash from './components/hash.js';
+import compressFile from './components/compressFile.js';
 
 //Functions
 
@@ -72,17 +74,23 @@ const dataHandler = async (data, StateApp) => {
                         await remove(StateApp.currentPath, request1);
                         break;
                     case 'cat':
-                        await cat(request1);
+                        await cat(StateApp.currentPath, request1);
                         break;
                     case 'os':
                         await system(request1);
+                        break;
+                    case 'hash':
+                        await getHash(StateApp.currentPath, request1);
+                        break;
+                    case 'compress':
+                        await compressFile(StateApp.currentPath, request1, request2);
                         break;
                     default: 
                         stdout.write('Invalid input\n');
                 }
         }
     } catch (e) {
-        stdout.write(e.message);
+        stdout.write(e);
     }
 }
 

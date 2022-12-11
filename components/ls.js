@@ -1,5 +1,4 @@
 import { readdir } from 'node:fs/promises';
-import { stdout } from 'node:process';
 
 export default async function showLs(path) {
     let list = await readdir(path, { withFileTypes: true });;
