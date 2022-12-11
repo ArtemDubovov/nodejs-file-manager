@@ -8,6 +8,7 @@ import showLs from './components/ls.js';
 import cd from './components/cd.js';
 import add from './components/add.js';
 import rn from './components/rn.js';
+import remove from './components/rm.js';
 
 //Functions
 
@@ -65,6 +66,9 @@ const dataHandler = async (data, StateApp) => {
                     case 'rn':
                         await rn(StateApp.currentPath, request1.trim(), request2.trim());
                         break;
+                    case 'rm':
+                        await remove(StateApp.currentPath, request1.trim());
+                        break;
                     default: 
                         stdout.write('Invalid input\n');
                 }
@@ -79,14 +83,17 @@ const sendCurrentPath = (currentPath) => {
     stdout.write(`You are currently in ${currentPath}\n`);
 }
 
+// START APP------------------------------------------------------------------------------------
+
 const runApp = async () => {
     try {
         // CONSTS
         const USERNAME = getUserName(argv);
+        const PATH_DEFAULT = path.resolve(path.dirname(fileURLToPath(import.meta.url)));
 
         // STATE
 
-        const StateApp = new State(path.resolve(path.dirname(fileURLToPath(import.meta.url))));
+        const StateApp = new State(PATH_DEFAULT);
 
         // Start App
         stdout.write(`Welcome to the File Manager, ${USERNAME}!\n`);
