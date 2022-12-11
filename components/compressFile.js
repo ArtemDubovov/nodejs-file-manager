@@ -7,7 +7,7 @@ export default async function compressFile(currentPath, fileName, outputFile) {
     try {
         const fileInputPath = path.resolve(currentPath, fileName);
         const fileOutputFile = path.resolve(currentPath, outputFile);
-        const streamRead = createReadStream(fileInputPath, 'utf-8');
+        const streamRead = createReadStream(fileInputPath);
         const streamCompress = createBrotliCompress();
         const streamWrite = createWriteStream(fileOutputFile);
         const streamZlib = createGzip();

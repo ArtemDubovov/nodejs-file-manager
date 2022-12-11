@@ -13,6 +13,7 @@ import cat from './components/cat.js';
 import system from './components/os.js';
 import getHash from './components/hash.js';
 import compressFile from './components/compressFile.js';
+import decompressFile from './components/decompressFile.js';
 
 //Functions
 
@@ -84,6 +85,9 @@ const dataHandler = async (data, StateApp) => {
                         break;
                     case 'compress':
                         await compressFile(StateApp.currentPath, request1, request2);
+                        break;
+                    case 'decompress':
+                        await decompressFile(StateApp.currentPath, request1, request2);
                         break;
                     default: 
                         stdout.write('Invalid input\n');
