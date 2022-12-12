@@ -15,6 +15,7 @@ import getHash from './components/hash.js';
 import compressFile from './components/compressFile.js';
 import decompressFile from './components/decompressFile.js';
 import cp from './components/cp.js';
+import mv from './components/mv.js';
 
 //Functions
 
@@ -63,6 +64,8 @@ const dataHandler = async (data, StateApp) => {
                                 return;
                             }
                             StateApp.currentPath = ph;
+                            sendCurrentPath(StateApp.currentPath);
+                            return false;
                         });
                         break;
                     }
@@ -77,6 +80,9 @@ const dataHandler = async (data, StateApp) => {
                         break;
                     case 'rm':
                         await remove(StateApp.currentPath, request1);
+                        break;
+                    case 'mv':
+                        await mv(StateApp.currentPath, request1, request2)
                         break;
                     case 'cat':
                         await cat(StateApp.currentPath, request1);
@@ -97,6 +103,7 @@ const dataHandler = async (data, StateApp) => {
                         stdout.write('Invalid input\n');
                 }
         }
+        return true;
     } catch (e) {
         stdout.write('Invalid input\n');
     }
@@ -125,7 +132,11 @@ const runApp = async () => {
         // Work App
         stdin.on('data', async (data) => {
             await dataHandler(data, StateApp)
-            .then(() => sendCurrentPath(StateApp.currentPath));
+            .then((res) => {
+                if (res) {
+                    sendCurrentPath(StateApp.currentPath);
+                }
+            });
         }).setEncoding('utf-8');
 
         
