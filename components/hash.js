@@ -7,6 +7,9 @@ export default async function getHash(currentPath, pathFile) {
     try {
         const actualFilePath = path.resolve(currentPath, pathFile);
         const stream = createReadStream(actualFilePath);
+
+        stream.on('error', () => stdout.write('Operation failed\n'));
+
         stream.setEncoding('utf-8');
         const hash = createHash('sha256');
         stream.on('readable', () => {
@@ -18,6 +21,6 @@ export default async function getHash(currentPath, pathFile) {
             }
         });
     } catch (e) {
-        stdout.write('Invalid input');
+        stdout.write('Operation failed\n');
     }
 }

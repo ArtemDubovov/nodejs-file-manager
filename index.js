@@ -14,6 +14,7 @@ import system from './components/os.js';
 import getHash from './components/hash.js';
 import compressFile from './components/compressFile.js';
 import decompressFile from './components/decompressFile.js';
+import cp from './components/cp.js';
 
 //Functions
 
@@ -58,7 +59,7 @@ const dataHandler = async (data, StateApp) => {
                         const ph = path.resolve(StateApp.currentPath, request1);
                         stat(ph, (err, stats) => {
                             if (err || stats.isFile()) {
-                                stdout.write('Invalid input\n');
+                                stdout.write('Operation failed\n');
                                 return;
                             }
                             StateApp.currentPath = ph;
@@ -70,6 +71,9 @@ const dataHandler = async (data, StateApp) => {
                         break;
                     case 'rn':
                         await rn(StateApp.currentPath, request1, request2);
+                        break;
+                    case 'cp':
+                        await cp(StateApp.currentPath, request1, request2);
                         break;
                     case 'rm':
                         await remove(StateApp.currentPath, request1);
@@ -94,7 +98,7 @@ const dataHandler = async (data, StateApp) => {
                 }
         }
     } catch (e) {
-        stdout.write(e);
+        stdout.write('Invalid input\n');
     }
 }
 
@@ -119,8 +123,8 @@ const runApp = async () => {
         sendCurrentPath(StateApp.currentPath);
 
         // Work App
-        stdin.on('data', (data) => {
-            dataHandler(data, StateApp)
+        stdin.on('data', async (data) => {
+            await dataHandler(data, StateApp)
             .then(() => sendCurrentPath(StateApp.currentPath));
         }).setEncoding('utf-8');
 

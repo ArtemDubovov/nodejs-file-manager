@@ -11,9 +11,11 @@ export default async function compressFile(currentPath, fileName, outputFile) {
         const streamCompress = createBrotliCompress();
         const streamWrite = createWriteStream(fileOutputFile);
         const streamZlib = createGzip();
+
+        streamRead.on('error', () => stdout.write('Operation failed\n'));
     
         streamRead.pipe(streamCompress).pipe(streamZlib).pipe(streamWrite);
     } catch (e) {
-        stdout.write('Invalid input\n');
+        stdout.write('Operation failed\n');
     }
 }

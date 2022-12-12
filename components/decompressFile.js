@@ -11,9 +11,11 @@ export default async function decompressFile(currentPath, fileName, outputFile) 
         const streamDecompress = createBrotliDecompress();
         const streamWrite = createWriteStream(fileOutputFile);
         const streamZlib = createUnzip();
+
+        streamRead.on('error', () => stdout.write('Operation failed/n'));
     
         streamRead.pipe(streamZlib).pipe(streamDecompress).pipe(streamWrite);
     } catch (e) {
-        stdout.write('Invalid input\n');
+        stdout.write('Operation failed\n');
     }
 }
