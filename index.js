@@ -3,19 +3,19 @@ import path from 'path';
 import { fileURLToPath } from 'node:url';
 import { stat } from 'node:fs';
 
-import getUserName from './components/getUserName.js';
-import showLs from './components/ls.js';
-import cd from './components/cd.js';
-import add from './components/add.js';
-import rn from './components/rn.js';
-import remove from './components/rm.js';
-import cat from './components/cat.js';
-import system from './components/os.js';
-import getHash from './components/hash.js';
-import compressFile from './components/compressFile.js';
-import decompressFile from './components/decompressFile.js';
-import cp from './components/cp.js';
-import mv from './components/mv.js';
+import {
+    getUserName,
+    showLs,
+    add,
+    rn,
+    remove,
+    cat,
+    system,
+    getHash,
+    compressFile,
+    decompressFile,
+    cp,
+    mv} from './components/index.js';
 
 //Functions
 
