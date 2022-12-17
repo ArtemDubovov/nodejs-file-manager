@@ -11,6 +11,7 @@ import compressFile from './compressFile.js';
 import decompressFile from './decompressFile.js';
 import cp from './cp.js';
 import mv from './mv.js';
+import sendCurrentPath from './sendCurrentPath.js';
 
 export {
     getUserName,
@@ -25,5 +26,6 @@ export {
     compressFile,
     decompressFile,
     cp,
-    mv
+    mv,
+    sendCurrentPath
 }

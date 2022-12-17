@@ -1,12 +1,19 @@
 import path from 'path';
-import { stat } from 'fs';
+import { stat } from 'node:fs/promises';
+import { stdout } from 'process';
 
-export default function cd(currentPath, adress) {
-    const ph = path.resolve(currentPath, adress);
-    stat(ph, (err, stats) => {
-        if (err || stats.isFile()) {
-            return false;
+export default async function cd(currentPath, adress, StateApp) {
+    try {
+        const pathName = adress.split(' ').slice(1).join(' ').trim();
+        const ph = path.resolve(currentPath, pathName);
+        const statFile = await stat(ph);
+        if (!statFile.isDirectory()) {
+            stdout.write('Operation failed\n')
+        } else {
+            StateApp.currentPath = ph;
         }
-        return ph;
-    });
+    } catch (e) {
+        console.log(e);
+        stdout.write('Operation failed\n');
+    }
 }
